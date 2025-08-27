@@ -10,30 +10,25 @@ Example placedata object (JSON):
 
 ```
 {
-  "id": "place-001",
-  "name": "Old Town Park",
-  "latitude": 12.345678,
-  "longitude": 98.765432,
-  "category": "park",
-  "description": "A small public park with a historic fountain.",
-  "images": ["img/past/old-town-park-01.jpg"],
-  "tags": ["historic","green-space"],
-  "source": "Local archives",
-  "date_added": "2025-08-27"
+        "name": "India Gate",
+        "lat": 28.6129,
+        "lon": 77.2295,
+        "demographics": "A landmark surrounded by open space and a memorial.",
+        "changes": "The surrounding area has evolved to include more recreational facilities and better public infrastructure over decades.",
+        "significance": "A war memorial honoring Indian soldiers, it's a major tourist attraction and a key symbol of the city.",
+        "historicalImageUrl": "img/past/india_gate_1960s.png",
+        "currentImageUrl": "img/curr/india_gate_2024.png",
+        "futureImageUrl": "img/future/india_gate_2030.png"
 }
 ```
 
 Suggested fields (recommended):
-- id (string, unique)
 - name (string)
 - latitude (number)
 - longitude (number)
-- category (string)
-- description (string)
-- images (array of file paths or URLs)
-- tags (array of strings)
-- source (string: where the data came from)
-- date_added (ISO date)
+- demographics (string)
+- changes (string)
+- images(array of file paths or URLs)
 
 Keep objects small and focused. If you have many places, submit them as an array or multiple files.
 
