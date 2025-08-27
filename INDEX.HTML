@@ -327,6 +327,45 @@
             ]
         };
 
+        // Minimal drawMap implementation: render GeoJSON features and wire clicks
+        function drawMap(geojson) {
+            // Remove previous layer if present
+            if (currentLayer) {
+                map.removeLayer(currentLayer);
+            }
+
+            currentLayer = L.geoJSON(geojson, {
+                style: function(feature) {
+                    return {
+                        color: feature.properties && feature.properties.color ? feature.properties.color : '#3388ff',
+                        weight: 2,
+                        fillOpacity: 0.1
+                    };
+                },
+                onEachFeature: function(feature, layer) {
+                    // When a predefined feature is clicked, update the info panel and highlight it
+                    layer.on('click', function(e) {
+                        // Remove any existing highlight rectangle
+                        if (highlightedLayer && highlightedLayer !== layer) {
+                            try { highlightedLayer.setStyle && highlightedLayer.setStyle({weight:2}); } catch (err) {}
+                        }
+
+                        // If the feature is a path, visually emphasize it
+                        try {
+                            layer.setStyle && layer.setStyle({weight: 4});
+                            highlightedLayer = layer;
+                        } catch (err) {
+                            // ignore if not applicable
+                        }
+
+                        const props = feature.properties || { name: 'Feature' };
+                        const center = layer.getBounds ? layer.getBounds().getCenter() : e.latlng;
+                        updateInfoPanel(props, center.lat, center.lng);
+                    });
+                }
+            }).addTo(map);
+        }
+
         // Function to handle map clicks and search results
         function onMapClick(e) {
             // Remove any existing highlights

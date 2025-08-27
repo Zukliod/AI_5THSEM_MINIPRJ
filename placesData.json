@@ -6,9 +6,9 @@
         "demographics": "A landmark surrounded by open space and a memorial.",
         "changes": "The surrounding area has evolved to include more recreational facilities and better public infrastructure over decades.",
         "significance": "A war memorial honoring Indian soldiers, it's a major tourist attraction and a key symbol of the city.",
-        "historicalImageUrl": "images/past/india_gate_1960s.png",
-        "currentImageUrl": "images/current/india_gate_2024.png",
-        "futureImageUrl": "images/future/india_gate_2030.png"
+    "historicalImageUrl": "img/past/india_gate_1960s.png",
+    "currentImageUrl": "img/current/india_gate_2024.png",
+    "futureImageUrl": "img/future/india_gate_2030.png"
     },
     {
         "name": "Qutub Minar",
@@ -17,8 +17,8 @@
         "demographics": "A historic site and a tourist hub.",
         "changes": "The area around Qutub Minar has seen a rise in tourism infrastructure and local vendors catering to visitors.",
         "significance": "A UNESCO World Heritage Site and one of the tallest minarets in the world, showcasing Indo-Islamic architecture.",
-        "historicalImageUrl": "images/past/qutub_minar_1960s.png",
-        "currentImageUrl": "images/current/qutub_minar_2024.png",
-        "futureImageUrl": "images/future/qutub_minar_2030.png"
+    "historicalImageUrl": "img/past/qutub_minar_1960s.png",
+    "currentImageUrl": "img/current/qutub_minar_2024.png",
+    "futureImageUrl": "img/future/qutub_minar_2030.png"
     }
 ]
