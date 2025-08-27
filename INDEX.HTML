@@ -119,6 +119,7 @@
 
         let highlightedLayer = null;
         let currentLayer = null;
+        let placesData = [];
         
         // This function is no longer used since we are now using local image paths.
         // It's a good practice to remove unused code.
@@ -326,68 +327,6 @@
             ]
         };
 
-        const placesData = [
-            {
-                name: "India Gate",
-                lat: 28.6129,
-                lon: 77.2295,
-                demographics: "A landmark surrounded by open space and a memorial.",
-                changes: "The surrounding area has evolved to include more recreational facilities and better public infrastructure over decades.",
-                significance: "A war memorial honoring Indian soldiers, it's a major tourist attraction and a key symbol of the city.",
-                historicalImageUrl: "images/past/india_gate_1960s.png",
-                currentImageUrl: "images/current/india_gate_2024.png",
-                futureImageUrl: "images/future/india_gate_2030.png"
-            },
-            {
-                name: "Qutub Minar",
-                lat: 28.5244,
-                lon: 77.1855,
-                demographics: "A historic site and a tourist hub.",
-                changes: "The area around Qutub Minar has seen a rise in tourism infrastructure and local vendors catering to visitors.",
-                significance: "A UNESCO World Heritage Site and one of the tallest minarets in the world, showcasing Indo-Islamic architecture.",
-                historicalImageUrl: "images/past/qutub_minar_1960s.png",
-                currentImageUrl: "images/current/qutub_minar_2024.png",
-                futureImageUrl: "images/future/qutub_minar_2030.png"
-            }
-        ];
-
-
-        // 3. Function to draw the map data
-        function drawMap(data) {
-            // Remove previous layer if it exists
-            if (currentLayer) {
-                map.removeLayer(currentLayer);
-            }
-            if (highlightedLayer) {
-                map.removeLayer(highlightedLayer);
-            }
-            
-            // Create a new GeoJSON layer from the data
-            currentLayer = L.geoJSON(data, {
-                style: function(feature) {
-                    return {
-                        color: feature.properties.color,
-                        weight: 3,
-                        opacity: 0.7,
-                        fillColor: feature.properties.color,
-                        fillOpacity: 0.3
-                    };
-                },
-                onEachFeature: function(feature, layer) {
-                    layer.on('click', function(e) {
-                        updateInfoPanel(feature.properties);
-                        // Center the map on the selected polygon
-                        map.fitBounds(layer.getBounds());
-                    });
-                }
-            }).addTo(map);
-
-            // Fit the map to the bounds of the new data
-            if (currentLayer.getBounds().isValid()) {
-                map.fitBounds(currentLayer.getBounds());
-            }
-        }
-
         // Function to handle map clicks and search results
         function onMapClick(e) {
             // Remove any existing highlights
@@ -425,11 +364,13 @@
             
             // Check if the location is in our pre-defined dataset
             let foundPlace = null;
-            for (const place of placesData) {
-                const distance = map.distance(latlng, [place.lat, place.lon]);
-                if (distance < 500) { // 500 meters
-                    foundPlace = place;
-                    break;
+            if (placesData) {
+                for (const place of placesData) {
+                    const distance = map.distance(latlng, [place.lat, place.lon]);
+                    if (distance < 500) { // 500 meters
+                        foundPlace = place;
+                        break;
+                    }
                 }
             }
 
@@ -465,16 +406,32 @@
                     // Just set the map view, do not highlight or update info panel
                     map.setView([lat, lon], 15);
                 } else {
-                    alert('Location not found. Please try a different query.');
+                    console.log('Location not found. Please try a different query.');
                 }
             } catch (error) {
                 console.error("Search failed:", error);
-                alert('Search failed. Please try again later.');
+                console.log('Search failed. Please try again later.');
+            }
+        }
+        
+        // Fetch and process the JSON data on page load
+        async function fetchPlacesData() {
+            try {
+                const response = await fetch('placesData.json');
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                const data = await response.json();
+                placesData = data;
+            } catch (error) {
+                console.error('Could not fetch placesData.json:', error);
+                placesData = [];
             }
         }
 
         // Initial map load with current data and setup click listeners
-        window.onload = function() {
+        window.onload = async function() {
+            await fetchPlacesData();
             drawMap(currentData);
             map.on('click', onMapClick);
             document.getElementById('search-button').addEventListener('click', searchPlace);
